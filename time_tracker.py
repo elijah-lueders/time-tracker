@@ -5,27 +5,45 @@ import json
 
 
 def main():
-    today = datetime.date.today().strftime("%m-%d-%Y")
-    filename = f"{today}-log.json"
-    # filename = input("Enter the filename: ")
+    days = get_map_of_days()
+    WEEKDAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+    input_msg = ""
+    for day in WEEKDAYS:
+        if day in days:
+            input_msg = f"[{day}] {days[day][:5]} " + input_msg
+
+    filename = input(input_msg + " -->")
 
     while True:
         view_entries(filename)
-        choice = input("[1]ADD [2]EDIT [3]DEL [4]REPORT [0]EXIT -->")
+        choice = input("[1]ADD [2]EDIT [3]DEL [4]REPORT [0]EXIT -->") or "add"
 
-        if choice == "1":
+        if choice == "1" or choice.lower() == "add":
             add_entry(filename)
-        elif choice == "2":
+        elif choice == "2" or choice.lower() == "edit":
             edit_entry(filename)
-        elif choice == "3":
+        elif choice == "3" or choice.lower() == "del":
             delete_entry(filename)
-        elif choice == "4":
+        elif choice == "4" or choice.lower() == "report":
             generate_report(filename)
             break
-        elif choice == "0":
+        elif choice == "0" or choice.lower() == "exit":
             break
         else:
             print("Invalid choice. Please try again.")
+
+
+def get_map_of_days():
+    days = {}
+    date = datetime.date.today()
+    delta = 0
+    dayofweek = date.strftime("%a").lower()
+    while dayofweek != "sun":
+        date = date - datetime.timedelta(days=delta)
+        dayofweek = date.strftime("%a").lower()
+        days[dayofweek] = date.strftime("%m-%d-%Y")
+        delta += 1
+    return days
 
 
 def view_entries(filename):
