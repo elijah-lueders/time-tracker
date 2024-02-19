@@ -3,7 +3,6 @@
 import datetime
 import os
 import json
-import pprint
 
 
 def main():
