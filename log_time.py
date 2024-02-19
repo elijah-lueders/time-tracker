@@ -44,7 +44,7 @@ def main():
 def create_log_file(filename):
     data = {
         "filename": filename,
-        "categories": ["BREAK", "other", "IPOP"],
+        "categories": ["BREAK", "OTHER", "IPOP"],
         "entries": [],
     }
     with open(filename, "w") as f:
@@ -59,28 +59,47 @@ def load_categories(filename):
 
 def prompt_for_category(categories, filename):
     while True:
-        msg = "Select: "
+        msg = "Categories: "
         for i, category in enumerate(categories):
             msg += f"[{i+1}]{category} "
-        print(msg + "[0] ADD")
 
-        choice = input("Enter your choice: ")
+        choice = input(msg + " -->")
 
-        if choice.isdigit() and 0 <= int(choice) <= len(categories):
-            if int(choice) == 0:
-                new_category = input("Enter new category: ")
-                categories.append(new_category)
-                with open(filename, "r+") as f:
-                    data = json.load(f)
-                    data["categories"].append(new_category)
-                    f.seek(0)
-                    json.dump(data, f)
-                    f.truncate()
-                return new_category
-            else:
+        if choice.isdigit():
+            if 1 <= int(choice) <= len(categories):
                 return categories[int(choice) - 1]
+            else:
+                print(
+                    "Not an existing category. Choose again or enter a string for a new category."
+                )
+        elif choice.upper() in categories:
+            return choice.upper()
         else:
-            print("Invalid choice. Please try again.")
+            new_category = choice.upper()
+            categories.append(new_category)
+            with open(filename, "r+") as f:
+                data = json.load(f)
+                data["categories"].append(new_category)
+                f.seek(0)
+                json.dump(data, f)
+                f.truncate()
+            return new_category
+
+        # if choice.isdigit() and 0 <= int(choice) <= len(categories):
+        #     if int(choice) == 0:
+        #         new_category = input("Enter new category: ")
+        #         categories.append(new_category)
+        #         with open(filename, "r+") as f:
+        #             data = json.load(f)
+        #             data["categories"].append(new_category)
+        #             f.seek(0)
+        #             json.dump(data, f)
+        #             f.truncate()
+        #         return new_category
+        #     else:
+        #         return categories[int(choice) - 1]
+        # else:
+        #     print("Invalid choice. Please try again.")
 
 
 def append_log_entry(filename, timestamp, category, description):
