@@ -36,13 +36,10 @@ def main():
         elif choice == "2" or choice.lower() == "edit":
             edit_entry(filename)
         elif choice == "3" or choice.lower() == "del":
-        elif choice == "3" or choice.lower() == "del":
             delete_entry(filename)
-        elif choice == "4" or choice.lower() == "report":
         elif choice == "4" or choice.lower() == "report":
             generate_report(filename)
             break
-        elif choice == "0" or choice.lower() == "exit":
         elif choice == "0" or choice.lower() == "exit":
             break
         else:
