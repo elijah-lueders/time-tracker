@@ -11,7 +11,7 @@ def main():
     filenames = {}
     for i in range(weekday+1):
         day = today - datetime.timedelta(i)
-        filenames[day.strftime("%a").upper()] = f"{day.strftime("%m-%d-%Y")}-log.json"
+        filenames[day.strftime("%a").upper()] = f"{day.strftime('%m-%d-%Y')}-log.json"
     filesFormatted=""
     for d in filenames:
         filesFormatted = f"[{d}|{filenames[d][:5]}] " + filesFormatted
@@ -68,9 +68,14 @@ def create_log_file(filename):
     with open(filename, "w") as f:
         json.dump(data, f)
 
+def clear_screen():
+    if os.name == 'nt':  # for Windows
+        os.system('cls')
+    else:  # for Linux and Mac
+        os.system('clear')
 
 def view_entries(filename):
-    _ = os.system("cls")
+    clear_screen()
 
     with open(filename, "r") as f:
         data = json.load(f)
@@ -189,32 +194,31 @@ def delete_entry(filename):
 
 
 def generate_report(filename):
-    # open file and read the data
     with open(filename, "r") as f:
         data = json.load(f)
-    # create a dictionary to store the time spent on each category
+
     report = {}
-    # iterate over the entries
-    for entry in data["entries"]:
-        # if the category is not in the report, add it
+    entries = data["entries"]
+    for i, entry in enumerate(entries):
         if entry["category"] not in report:
             report[entry["category"]] = 0
-        # if the entry is not the last one
-        if entry != data["entries"][-1]:
-            # calculate the time spent between the current entry and the next one
-            time_spent = datetime.datetime.strptime(
-                data["entries"][data["entries"].index(entry) + 1]["timestamp"],
-                "%H:%M:%S",
-            ) - datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
-        elif entry["category"] != "BREAK":
-            time_spent = datetime.datetime.now() - datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
-            # add the time spent to the category
-        report[entry["category"]] += time_spent.total_seconds() / 3600
-    # print the report
+
+        # Check if the entry is not the last one or if it's the last one and not a BREAK
+        if i < len(entries) - 1 or (i == len(entries) - 1 and entry["category"] != "BREAK"):
+            if i < len(entries) - 1:
+                next_entry = entries[i + 1]
+                time_spent = datetime.datetime.strptime(next_entry["timestamp"], "%H:%M:%S") - datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
+            else:
+                # For the last entry that is not a BREAK, calculate time until now
+                time_spent = datetime.datetime.now() - datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
+
+            # Add the calculated time to the report
+            report[entry["category"]] += time_spent.total_seconds() / 3600
+
+    clear_screen()
     print("Category Totals:")
     for category, time in report.items():
         print(f"{category}: {round(time, 2)} hours")
-
 
 if __name__ == "__main__":
     main()
