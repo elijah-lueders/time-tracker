@@ -215,7 +215,7 @@ def generate_report(filename):
             # Add the calculated time to the report
             report[entry["category"]] += time_spent.total_seconds() / 3600
 
-    clear_screen()
+    print()
     print("Category Totals:")
     for category, time in report.items():
         print(f"{category}: {round(time, 2)} hours")
