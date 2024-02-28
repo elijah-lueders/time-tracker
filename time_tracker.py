@@ -210,7 +210,13 @@ def generate_report(filename):
                 time_spent = datetime.datetime.strptime(next_entry["timestamp"], "%H:%M:%S") - datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
             else:
                 # For the last entry that is not a BREAK, calculate time until now
-                time_spent = datetime.datetime.now() - datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
+
+                currentTime = datetime.datetime.now()
+                entryTime = datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
+                currentDay = datetime.datetime.today()
+                combined = datetime.datetime.combine(currentDay, entryTime.time())
+                
+                time_spent = currentTime - combined
 
             # Add the calculated time to the report
             report[entry["category"]] += time_spent.total_seconds() / 3600
