@@ -39,7 +39,7 @@ def main():
             delete_entry(filename)
         elif choice == "4" or choice.lower() == "report":
             generate_report(filename)
-            break
+            input()
         elif choice == "0" or choice.lower() == "exit":
             break
         else:
@@ -76,17 +76,18 @@ def clear_screen():
 
 def view_entries(filename):
     clear_screen()
+    print()
 
     with open(filename, "r") as f:
         data = json.load(f)
-        hl = "===========================================\n"
-        print(f"{hl} {data['filename']} \n{hl}")
+        print(f" {data['filename'][:10]} ".center(50, "="))
+        print(f" L O G ".center(50, '='))
 
         for i, entry in enumerate(data["entries"], start=1):
             print(
                 f"{str(i).rjust(3)}| {entry['timestamp']} | {entry['category'].ljust(8)} | {entry['description']}"
             )
-        print(hl)
+        print(f"".center(50, '='))
 
 
 def log_new_entry(filename):    
@@ -221,10 +222,27 @@ def generate_report(filename):
             # Add the calculated time to the report
             report[entry["category"]] += time_spent.total_seconds() / 3600
 
+    view_entries(filename)
     print()
-    print("Category Totals:")
+    print(f" T O T A L S ".center(50, '='))
+    timeLeft = 0
     for category, time in report.items():
-        print(f"{category}: {round(time, 2)} hours")
+        print(f"{category:<20}{round(time, 2):>30}".replace(" ", "."))
+        timeLeft += time
+    print(f"".center(50, '='))
+ 
+    print()
+    print(f" L E F T ".center(50, '='))
+    timeLeft -= report["BREAK"]
+    minLeft = int((8 - timeLeft) * 60)
+    wholeHours = minLeft//60
+    wholeMins = minLeft%60
+    if minLeft < 60:
+        print(f"{minLeft} mins".center(50))
+    else:
+        print(f" {wholeHours} hours and {wholeMins} mins ".center(50))
+    print(f"".center(50, '='))
+
 
 if __name__ == "__main__":
     main()
