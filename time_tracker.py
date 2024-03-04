@@ -198,7 +198,8 @@ def generate_report(filename):
     with open(filename, "r") as f:
         data = json.load(f)
 
-    report = {}
+    currentTime = datetime.datetime.now()
+    report = {"BREAK": 0}
     entries = data["entries"]
     for i, entry in enumerate(entries):
         if entry["category"] not in report:
@@ -212,7 +213,6 @@ def generate_report(filename):
             else:
                 # For the last entry that is not a BREAK, calculate time until now
 
-                currentTime = datetime.datetime.now()
                 entryTime = datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
                 currentDay = datetime.datetime.today()
                 combined = datetime.datetime.combine(currentDay, entryTime.time())
@@ -231,17 +231,22 @@ def generate_report(filename):
         timeLeft += time
     print(f"".center(50, '='))
  
-    print()
-    print(f" L E F T ".center(50, '='))
     timeLeft -= report["BREAK"]
     minLeft = int((8 - timeLeft) * 60)
     wholeHours = minLeft//60
     wholeMins = minLeft%60
-    if minLeft < 60:
-        print(f"{minLeft} mins".center(50))
+    dateTimeTillEod = datetime.timedelta(minutes=minLeft)
+    eod = currentTime + dateTimeTillEod
+    if minLeft > 0:
+        print()
+        print(f" L E F T ".center(50, '='))
+        if minLeft < 60:
+            print(f"{minLeft} mins >>>>> {eod.strftime("%I:%M %p")}".center(50))
+        else:
+            print(f" {wholeHours} hours and {wholeMins} mins >>>>> {eod.strftime("%I:%M %p")}".center(50))
+        print(f"".center(50, '='))
     else:
-        print(f" {wholeHours} hours and {wholeMins} mins ".center(50))
-    print(f"".center(50, '='))
+        print("  /$$$$$$   /$$$$$$        /$$   /$$  /$$$$$$  /$$      /$$ /$$$$$$$$ /$$ /$$\n /$$__  $$ /$$__  $$      | $$  | $$ /$$__  $$| $$$    /$$$| $$_____/| $$| $$\n| $$  \\__/| $$  \\ $$      | $$  | $$| $$  \\ $$| $$$$  /$$$$| $$      | $$| $$\n| $$ /$$$$| $$  | $$      | $$$$$$$$| $$  | $$| $$ $$/$$ $$| $$$$$   | $$| $$\n| $$|_  $$| $$  | $$      | $$__  $$| $$  | $$| $$  $$$| $$| $$__/   |__/|__/\n| $$  \\ $$| $$  | $$      | $$  | $$| $$  | $$| $$\\  $ | $$| $$              \n|  $$$$$$/|  $$$$$$/      | $$  | $$|  $$$$$$/| $$ \\/  | $$| $$$$$$$$ /$$ /$$\n \\______/  \\______/       |__/  |__/ \\______/ |__/     |__/|________/|__/|__/\n")
 
 
 if __name__ == "__main__":
