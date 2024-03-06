@@ -241,9 +241,9 @@ def generate_report(filename):
         print()
         print(f" L E F T ".center(50, '='))
         if minLeft < 60:
-            print(f"{minLeft} mins >>>>> {eod.strftime("%I:%M %p")}".center(50))
+            print(f"{minLeft} mins >>>>> {eod.strftime('%I:%M %p')}".center(50))
         else:
-            print(f" {wholeHours} hours and {wholeMins} mins >>>>> {eod.strftime("%I:%M %p")}".center(50))
+            print(f" {wholeHours} hours and {wholeMins} mins >>>>> {eod.strftime('%I:%M %p')}".center(50))
         print(f"".center(50, '='))
     else:
         print("  /$$$$$$   /$$$$$$        /$$   /$$  /$$$$$$  /$$      /$$ /$$$$$$$$ /$$ /$$\n /$$__  $$ /$$__  $$      | $$  | $$ /$$__  $$| $$$    /$$$| $$_____/| $$| $$\n| $$  \\__/| $$  \\ $$      | $$  | $$| $$  \\ $$| $$$$  /$$$$| $$      | $$| $$\n| $$ /$$$$| $$  | $$      | $$$$$$$$| $$  | $$| $$ $$/$$ $$| $$$$$   | $$| $$\n| $$|_  $$| $$  | $$      | $$__  $$| $$  | $$| $$  $$$| $$| $$__/   |__/|__/\n| $$  \\ $$| $$  | $$      | $$  | $$| $$  | $$| $$\\  $ | $$| $$              \n|  $$$$$$/|  $$$$$$/      | $$  | $$|  $$$$$$/| $$ \\/  | $$| $$$$$$$$ /$$ /$$\n \\______/  \\______/       |__/  |__/ \\______/ |__/     |__/|________/|__/|__/\n")
