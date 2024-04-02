@@ -1,0 +1,30 @@
+{
+    "filename": "02-09-2024-log.json",
+    "categories": [
+        "BREAK",
+        "other",
+        "IPOP"
+    ],
+    "entries": [
+        {
+            "timestamp": "08:10:29",
+            "category": "IPOP",
+            "description": "Playwright tests"
+        },
+        {
+            "timestamp": "11:15:23",
+            "category": "BREAK",
+            "description": "walk"
+        },
+        {
+            "timestamp": "11:50:58",
+            "category": "IPOP",
+            "description": "Playwright"
+        },
+        {
+            "timestamp": "16:45:13",
+            "category": "BREAK",
+            "description": "EOD"
+        }
+    ]
+}

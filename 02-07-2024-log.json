@@ -1,0 +1,30 @@
+{
+    "filename": "02-07-2024-log.json",
+    "categories": [
+        "BREAK",
+        "other",
+        "IPOP"
+    ],
+    "entries": [
+        {
+            "timestamp": "08:15:48",
+            "category": "IPOP",
+            "description": "Playwright tests"
+        },
+        {
+            "timestamp": "11:28:32",
+            "category": "OTHER",
+            "description": "Lunch meet and greet with Irving"
+        },
+        {
+            "timestamp": "12:42:18",
+            "category": "IPOP",
+            "description": "Playright tests"
+        },
+        {
+            "timestamp": "16:45:26",
+            "category": "BREAK",
+            "description": "OUT"
+        }
+    ]
+}

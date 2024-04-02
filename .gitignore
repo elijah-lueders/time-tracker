@@ -22,4 +22,4 @@
 *.bak
 
 # Ignore json files
-*.json
+# *.json

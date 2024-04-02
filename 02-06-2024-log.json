@@ -1,0 +1,40 @@
+{
+    "filename": "02-06-2024-log.json",
+    "categories": [
+        "BREAK",
+        "other",
+        "IPOP"
+    ],
+    "entries": [
+        {
+            "timestamp": "08:11:04",
+            "category": "IPOP",
+            "description": "refactoring submitted code"
+        },
+        {
+            "timestamp": "12:15:15",
+            "category": "BREAK",
+            "description": "lunch"
+        },
+        {
+            "timestamp": "12:29:34",
+            "category": "IPOP",
+            "description": "writing tickets / planning"
+        },
+        {
+            "timestamp": "14:51:45",
+            "category": "IPOP",
+            "description": "research smoke tests/playwright"
+        },
+        {
+            "timestamp": "15:47:39",
+            "category": "IPOP",
+            "description": "writing tickets"
+        },
+        {
+            "timestamp": "16:33:37",
+            "category": "BREAK",
+            "description": "out"
+        }
+    ]
+}
