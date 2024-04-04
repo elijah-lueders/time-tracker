@@ -9,14 +9,14 @@ def main():
     today = datetime.date.today()
     weekday = today.weekday()
     filenames = {}
-    for i in range(weekday+1):
+    for i in range(weekday + 1):
         day = today - datetime.timedelta(i)
         filenames[day.strftime("%a").upper()] = f"{day.strftime('%m-%d-%Y')}-log.json"
-    filesFormatted=""
+    filesFormatted = ""
     for d in filenames:
         filesFormatted = f"[{d}|{filenames[d][:5]}] " + filesFormatted
     print(filesFormatted)
-        
+
     day = input("Choose a day --> ")[:3].upper()
     if day == "":
         day = today.strftime("%a").upper()
@@ -62,17 +62,19 @@ def get_map_of_days():
 def create_log_file(filename):
     data = {
         "filename": filename,
-        "categories": ["BREAK", "OTHER", "IPOP"],
+        "categories": ["ITA-STEL", "IPOP", "BREAK", "OTHER"],
         "entries": [],
     }
     with open(filename, "w") as f:
         json.dump(data, f)
 
+
 def clear_screen():
-    if os.name == 'nt':  # for Windows
-        os.system('cls')
+    if os.name == "nt":  # for Windows
+        os.system("cls")
     else:  # for Linux and Mac
-        os.system('clear')
+        os.system("clear")
+
 
 def view_entries(filename):
     clear_screen()
@@ -81,16 +83,16 @@ def view_entries(filename):
     with open(filename, "r") as f:
         data = json.load(f)
         print(f" {data['filename'][:10]} ".center(50, "="))
-        print(f" L O G ".center(50, '='))
+        print(f" L O G ".center(50, "="))
 
         for i, entry in enumerate(data["entries"], start=1):
             print(
                 f"{str(i).rjust(3)}| {entry['timestamp']} | {entry['category'].ljust(8)} | {entry['description']}"
             )
-        print(f"".center(50, '='))
+        print(f"".center(50, "="))
 
 
-def log_new_entry(filename):    
+def log_new_entry(filename):
     categories = load_categories(filename)
 
     timestamp = input("Timestamp --> ")
@@ -101,6 +103,7 @@ def log_new_entry(filename):
         timestamp = datetime.datetime.now().strftime("%H:%M:%S")
 
     append_entry(filename, timestamp, category, description)
+
 
 def load_categories(filename):
     with open(filename, "r") as f:
@@ -158,12 +161,16 @@ def edit_entry(filename):
         entry = data["entries"][entry_num]
         categories = load_categories(filename)
 
-        fill = '-'
-        align = '^'
+        fill = "-"
+        align = "^"
         width = 20
-        timestamp =     input(f"Timestamp   [CUR]{entry['timestamp']:{fill}{align}{width}}> ")
-        category =      input(f"Category    [CUR]{entry['category']:{fill}{align}{width}}> ")
-        description =   input(f"Description [CUR]{entry['description'][:16]:{fill}{align}{width}}> ")
+        timestamp = input(
+            f"Timestamp   [CUR]{entry['timestamp']:{fill}{align}{width}}> "
+        )
+        category = input(f"Category    [CUR]{entry['category']:{fill}{align}{width}}> ")
+        description = input(
+            f"Description [CUR]{entry['description'][:16]:{fill}{align}{width}}> "
+        )
 
         if timestamp == "":
             timestamp = entry["timestamp"]
@@ -206,17 +213,21 @@ def generate_report(filename):
             report[entry["category"]] = 0
 
         # Check if the entry is not the last one or if it's the last one and not a BREAK
-        if i < len(entries) - 1 or (i == len(entries) - 1 and entry["category"] != "BREAK"):
+        if i < len(entries) - 1 or (
+            i == len(entries) - 1 and entry["category"] != "BREAK"
+        ):
             if i < len(entries) - 1:
                 next_entry = entries[i + 1]
-                time_spent = datetime.datetime.strptime(next_entry["timestamp"], "%H:%M:%S") - datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
+                time_spent = datetime.datetime.strptime(
+                    next_entry["timestamp"], "%H:%M:%S"
+                ) - datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
             else:
                 # For the last entry that is not a BREAK, calculate time until now
 
                 entryTime = datetime.datetime.strptime(entry["timestamp"], "%H:%M:%S")
                 currentDay = datetime.datetime.today()
                 combined = datetime.datetime.combine(currentDay, entryTime.time())
-                
+
                 time_spent = currentTime - combined
 
             # Add the calculated time to the report
@@ -224,29 +235,35 @@ def generate_report(filename):
 
     view_entries(filename)
     print()
-    print(f" T O T A L S ".center(50, '='))
+    print(f" T O T A L S ".center(50, "="))
     timeLeft = 0
     for category, time in report.items():
         print(f"{category:<20}{round(time, 2):>30}".replace(" ", "."))
         timeLeft += time
-    print(f"".center(50, '='))
- 
+    print(f"".center(50, "="))
+
     timeLeft -= report["BREAK"]
     minLeft = int((8 - timeLeft) * 60)
-    wholeHours = minLeft//60
-    wholeMins = minLeft%60
+    wholeHours = minLeft // 60
+    wholeMins = minLeft % 60
     dateTimeTillEod = datetime.timedelta(minutes=minLeft)
     eod = currentTime + dateTimeTillEod
     if minLeft > 0:
         print()
-        print(f" L E F T ".center(50, '='))
+        print(f" L E F T ".center(50, "="))
         if minLeft < 60:
             print(f"{minLeft} mins >>>>> {eod.strftime('%I:%M %p')}".center(50))
         else:
-            print(f" {wholeHours} hours and {wholeMins} mins >>>>> {eod.strftime('%I:%M %p')}".center(50))
-        print(f"".center(50, '='))
+            print(
+                f" {wholeHours} hours and {wholeMins} mins >>>>> {eod.strftime('%I:%M %p')}".center(
+                    50
+                )
+            )
+        print(f"".center(50, "="))
     else:
-        print("                 /$$$$$$   /$$$$$$                 \n                /$$__  $$ /$$__  $$                \n               | $$  \\__/| $$  \\ $$                \n               | $$ /$$$$| $$  | $$                \n               | $$|_  $$| $$  | $$                \n               | $$  \\ $$| $$  | $$                \n               |  $$$$$$/|  $$$$$$/                \n                \\______/  \\______/                 \n                                                   \n   /$$   /$$  /$$$$$$  /$$      /$$ /$$$$$$$$   /$$\n  | $$  | $$ /$$__  $$| $$$    /$$$| $$_____/  | $$\n  | $$  | $$| $$  \\ $$| $$$$  /$$$$| $$        | $$\n  | $$$$$$$$| $$  | $$| $$ $$/$$ $$| $$$$$     | $$\n  | $$__  $$| $$  | $$| $$  $$$| $$| $$__/     |__/\n  | $$  | $$| $$  | $$| $$\\  $ | $$| $$            \n  | $$  | $$|  $$$$$$/| $$ \\/  | $$| $$$$$$$$   /$$\n  |__/  |__/ \\______/ |__/     |__/|________/  |__/\n")
+        print(
+            "                 /$$$$$$   /$$$$$$                 \n                /$$__  $$ /$$__  $$                \n               | $$  \\__/| $$  \\ $$                \n               | $$ /$$$$| $$  | $$                \n               | $$|_  $$| $$  | $$                \n               | $$  \\ $$| $$  | $$                \n               |  $$$$$$/|  $$$$$$/                \n                \\______/  \\______/                 \n                                                   \n   /$$   /$$  /$$$$$$  /$$      /$$ /$$$$$$$$   /$$\n  | $$  | $$ /$$__  $$| $$$    /$$$| $$_____/  | $$\n  | $$  | $$| $$  \\ $$| $$$$  /$$$$| $$        | $$\n  | $$$$$$$$| $$  | $$| $$ $$/$$ $$| $$$$$     | $$\n  | $$__  $$| $$  | $$| $$  $$$| $$| $$__/     |__/\n  | $$  | $$| $$  | $$| $$\\  $ | $$| $$            \n  | $$  | $$|  $$$$$$/| $$ \\/  | $$| $$$$$$$$   /$$\n  |__/  |__/ \\______/ |__/     |__/|________/  |__/\n"
+        )
 
 
 if __name__ == "__main__":
